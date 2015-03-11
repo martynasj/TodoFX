@@ -69,6 +69,7 @@ public class TodoWindowController {
             remarksTextArea.appendText(taskTitleField.getText());
         });
 
+
         // Listen for selection changes and show the person details when changed.
         todoTableView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> setTaskDetails(newValue));
