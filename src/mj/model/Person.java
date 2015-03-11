@@ -12,6 +12,11 @@ public class Person {
     private StringProperty fName;
     private StringProperty lName;
 
+    public Person() {
+        this.fName = new SimpleStringProperty("Self");
+        this.lName = new SimpleStringProperty();
+    }
+
     public Person(String fName, String lName) {
         this.fName = new SimpleStringProperty(fName);
         this.lName = new SimpleStringProperty(lName);

@@ -1,8 +1,9 @@
 package mj.model;
 
 import javafx.beans.property.*;
+import mj.util.Priority;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * Created by martynasjankauskas on 11/03/15.
@@ -11,9 +12,12 @@ import java.util.Date;
 public class Issue {
 
     private StringProperty taskTitle;
-    private SimpleObjectProperty<Date> taskDate;
     private StringProperty taskRemarks;
     private BooleanProperty isCompleted;
+    private ObjectProperty responsiblePerson;
+    private ObjectProperty<LocalDate> taskDate;
+    private ObjectProperty<LocalDate> dateDue;
+    private Priority priority;
 
     /**
     *   Constructor
@@ -22,9 +26,12 @@ public class Issue {
     public Issue(String taskTitle) {
 
         this.taskTitle = new SimpleStringProperty(taskTitle);
-        this.taskDate = new SimpleObjectProperty<>(new Date());
         this.taskRemarks = new SimpleStringProperty();
-        this.isCompleted = new SimpleBooleanProperty(true);    // initial state is false
+        this.isCompleted = new SimpleBooleanProperty(false);    // initial state is false
+        this.responsiblePerson = new SimpleObjectProperty<>(new Person());
+        this.taskDate = new SimpleObjectProperty<>(LocalDate.now());
+        this.dateDue = new SimpleObjectProperty<>(LocalDate.now());
+        this.priority = Priority.NORMAL;
 
     }
 
@@ -40,16 +47,28 @@ public class Issue {
         this.taskRemarks.set(taskRemarks);
     }
 
-    public Date getTaskDate() {
+    public LocalDate getTaskDate() {
         return taskDate.get();
     }
 
-    public SimpleObjectProperty<Date> taskDateProperty() {
+    public ObjectProperty<LocalDate> taskDateProperty() {
         return taskDate;
     }
 
-    public void setTaskDate(Date taskDate) {
+    public void setTaskDate(LocalDate taskDate) {
         this.taskDate.set(taskDate);
+    }
+
+    public LocalDate getDateDue() {
+        return dateDue.get();
+    }
+
+    public ObjectProperty<LocalDate> dateDueProperty() {
+        return dateDue;
+    }
+
+    public void setDateDue(LocalDate dateDue) {
+        this.dateDue.set(dateDue);
     }
 
     public String getTaskTitle() {
@@ -76,5 +95,23 @@ public class Issue {
         this.isCompleted.set(isCompleted);
     }
 
+    public Object getResponsiblePerson() {
+        return responsiblePerson.get();
+    }
 
+    public ObjectProperty responsiblePersonProperty() {
+        return responsiblePerson;
+    }
+
+    public void setResponsiblePerson(Object responsiblePerson) {
+        this.responsiblePerson.set(responsiblePerson);
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
+    }
 }
