@@ -1,15 +1,14 @@
 package mj.view;
 
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
-import javafx.util.Callback;
+import javafx.scene.layout.AnchorPane;
 import mj.model.Issue;
 import mj.model.IssueList;
 import mj.model.Person;
@@ -20,9 +19,12 @@ import java.time.LocalDate;
 
 public class TodoWindowController {
 
-    public ObservableList<Issue> sampleList = FXCollections.observableArrayList();
+    private ObservableList<Issue> issueList;
 
     private Issue selectedIssue;
+
+    @FXML
+    private AnchorPane detailsPane;
 
     @FXML
     private TableView<Issue> todoTableView;
@@ -35,6 +37,9 @@ public class TodoWindowController {
 
     @FXML
     private TableColumn<Issue, Boolean> stateColumn;
+
+    @FXML
+    private TableColumn<Issue, String> personColumn;
 
     @FXML
     private TextField taskTitleField;
@@ -58,6 +63,9 @@ public class TodoWindowController {
     private ComboBox<Priority> priorityPicker;
 
     @FXML
+    private TextArea taskTitleArea;
+
+    @FXML
     private Label dateCreatedLabel;
 
     @FXML
@@ -67,52 +75,60 @@ public class TodoWindowController {
      * Initializes the controller class. This method is automatically called
      * after the fxml file has been loaded.
      */
+
     @FXML
     private void initialize() {
 
+        issueList = IssueList.getSampleList();
 
-
-        IssueList issueList = new IssueList();
         PersonList personList = new PersonList();
+
+        setTaskDetails(null);
+
+        myButton.setOnAction((event) -> {
+        });
 
         // Don't know where to construct this list
         ObservableList<Priority> priorities = FXCollections.observableArrayList();
         priorities.addAll(Priority.HIGH, Priority.NORMAL, Priority.LOW);
         priorityPicker.setItems(priorities);
 
-        todoTableView.setItems(issueList.getSampleList());
+        todoTableView.setItems(issueList);
         personPicker.setItems(personList.getPersonList());
-        datePicker.setDisable(false);
-
-        changeStyleToCompleted();
 
         taskColumn.setCellValueFactory(cellData -> cellData.getValue().taskTitleProperty());
-
         dateColumn.setCellValueFactory(cellData -> cellData.getValue().dateDueProperty());
+        personColumn.setCellValueFactory(cellData -> cellData.getValue().responsiblePersonProperty());
 
-        stateColumn.setCellValueFactory( f -> f.getValue().isCompletedProperty());
-        stateColumn.setCellFactory( tc -> new CheckBoxTableCell<Issue, Boolean>());
+        stateColumn.setCellFactory(CheckBoxTableCell.forTableColumn(stateColumn));
+        stateColumn.setCellValueFactory(f -> f.getValue().isCompletedProperty());
 
-        myButton.setOnAction((event) -> {
-            // Button was clicked, do something...
-            remarksTextArea.appendText(taskTitleField.getText());
-        });
-
+        // Marks the selected task completed
         statusCheckBox.setOnAction(event -> {
             selectedIssue.setIsCompleted(statusCheckBox.isSelected());
         });
 
-        // Listen for selection changes and show the person details when changed.
+        // Listen for selection changes and show the task details when changed.
         todoTableView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     this.selectedIssue = newValue;
-                    setTaskDetails();
+                    setTaskDetails(newValue);
                 });
+
 
         // Detects only when the enter key is pressed
         taskTitleField.setOnKeyPressed((event) -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
-                issueList.createNewIssue(taskTitleField.getText());
+                IssueList.createNewIssue(taskTitleField.getText());
+                taskTitleField.clear();
+            }
+        });
+
+        // Deletes Issue from list
+        // Detects when the delete key is pressed
+        todoTableView.setOnKeyPressed((event) -> {
+            if (event.getCode().equals(KeyCode.BACK_SPACE)) {
+                IssueList.deleteIssue(todoTableView.getSelectionModel().getSelectedIndex());
                 taskTitleField.clear();
             }
         });
@@ -141,20 +157,29 @@ public class TodoWindowController {
             selectedIssue.setTaskRemarks(remarksTextArea.getText());
         });
 
+
+
     }
 
-    private void setTaskDetails() {
-        Person responsiblePerson = (Person) selectedIssue.getResponsiblePerson();
-        remarksTextArea.setText(selectedIssue.getTaskRemarks());
-        personPicker.getSelectionModel().select(responsiblePerson);
-        dateCreatedLabel.setText(selectedIssue.getTaskDate().toString());
-        statusCheckBox.setSelected(selectedIssue.getIsCompleted());
-        datePicker.setValue(selectedIssue.getDateDue());
-        priorityPicker.setValue(selectedIssue.getPriority());
+    private void setTaskDetails(Issue selectedIssue) {
+        if (selectedIssue != null) {
+            detailsPane.setDisable(false);
+            Person responsiblePerson = (Person) selectedIssue.getResponsiblePerson();
+            taskTitleArea.setText(selectedIssue.getTaskTitle());
+            remarksTextArea.setText(selectedIssue.getTaskRemarks());
+            personPicker.getSelectionModel().select(responsiblePerson);
+            dateCreatedLabel.setText(selectedIssue.getTaskDate().toString());
+            statusCheckBox.setSelected(selectedIssue.getIsCompleted());
+            datePicker.setValue(selectedIssue.getDateDue());
+            priorityPicker.setValue(selectedIssue.getPriority());
+        } else {
+            detailsPane.setDisable(true);
+        }
     }
 
     // To be implemented one day
     private void changeStyleToCompleted() {
+        dateCreatedLabel.setStyle("-fx-background-color: green");
     }
 
 }

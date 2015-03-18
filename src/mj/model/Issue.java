@@ -3,6 +3,7 @@ package mj.model;
 import javafx.beans.property.*;
 import mj.util.Priority;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
@@ -22,6 +23,10 @@ public class Issue {
     /**
     *   Constructor
     */
+
+    public Issue() {
+        this("Default task");
+    }
 
     public Issue(String taskTitle) {
 

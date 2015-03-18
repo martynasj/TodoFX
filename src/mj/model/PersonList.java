@@ -15,7 +15,8 @@ public class PersonList {
     }
 
     private void makePersonList() {
-        personList.add(new Person());
+        personList.add(new Person("Matt Bezak"));
+        personList.add(new Person("Patrik Pircak"));
         personList.add(new Person("Martynas", "Jankauskas"));
         personList.add(new Person("Domas", "Jurkonis"));
         personList.add(new Person("Gytis", "Kandrotas"));

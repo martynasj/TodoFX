@@ -1,0 +1,104 @@
+.background {
+    -fx-background-color: #3a3a3a;
+}
+
+/*.root { -fx-focus-color: transparent; }*/
+
+.root {
+    -fx-text-base-color: #202020;
+    -fx-text-fill: -fx-text-base-color;
+
+    /*-dark: rgb(47.0, 52.0, 57.0);*/
+    /*-fx-background-color: -dark;*/
+
+    /*default font */
+    -fx-font-family: 'Helvetica Neue';
+    -fx-font-size: 100%;
+    -fx-font-weight: 600;
+    -fx-disabled-opacity: 0.6;
+
+    -flatter-red: rgb(237.0, 68.0, 37.0);
+    -flatter-blue: rgb(0.0, 184.0, 222.0);
+}
+
+/*.details-pane {*/
+    /*-fx-background-color: aliceblue;*/
+/*}*/
+
+/*.text-field, .text-area .content, .text-area {*/
+    /*-fx-font-size: 1 em;*/
+    /*-fx-background-color: #f5f5f5;*/
+    /*-fx-border-color: transparent;*/
+/*}*/
+
+/*.label {*/
+    /*-fx-font-size: 1 em;*/
+/*}*/
+
+/*.new-task-field {*/
+    /*-fx-font-size: 18 px;*/
+    /*-fx-font-weight: bold;*/
+/*}*/
+
+/*.text-field:focused, .text-field:hover, .text-area .content:focused, .text-area . content:hover {*/
+    /*-fx-background-color: antiquewhite;*/
+/*}*/
+
+
+/*.taskTitle {*/
+    /*-fx-font-size: 20 px;*/
+    /*-fx-font-weight: bold;*/
+/*}*/
+
+/*.button {*/
+    /*-fx-background-color: aqua;*/
+/*}*/
+
+/*.button:hover {*/
+    /*-fx-background-color: brown;*/
+/*}*/
+
+/*.split-pane {*/
+    /*-fx-background-color: #ffffff;*/
+/*}*/
+
+/*.table-view .column-header {*/
+    /*-fx-background-color: #f5f5f5;*/
+/*}*/
+
+/*.table-view:focused, .table-view.content {*/
+    /*-fx-border-color: transparent;*/
+/*}*/
+
+/*.column-header-background {*/
+    /*visibility: hidden;*/
+/*}*/
+
+/*.split-pane-divider {*/
+    /*-fx-background-color: #dee6ed;*/
+    /*-fx-border-color: transparent;*/
+    /*-fx-padding: 0;*/
+/*}*/
+
+/*.combo-box {*/
+    /*-fx-background-color: transparent;*/
+/*}*/
+
+/*.combo-box:hover {*/
+    /*-fx-background-color: #ffffff;*/
+    /*-fx-border-color: #3a3a3a;*/
+/*}*/
+
+/*.date-picker {*/
+    /*-fx-background-color: transparent;*/
+/*}*/
+
+
+/*.table-view .cell {*/
+    /*-fx-text-fill: black;*/
+    /*-fx-cell-size: 30 px;*/
+/*}*/
+
+/*.table-view:focused .table-row-cell:filled:focused:selected {*/
+    /*-fx-background-color: #F5F5F5;*/
+/*}*/
