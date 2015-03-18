@@ -1,6 +1,8 @@
 package mj.view;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -48,7 +50,10 @@ public class TodoWindowController {
     private Label taskListLabel;
 
     @FXML
-    private Button myButton;
+    private Button addIssueButton;
+
+    @FXML
+    private Button completeButton;
 
     @FXML
     private TextArea remarksTextArea;
@@ -85,7 +90,17 @@ public class TodoWindowController {
 
         setTaskDetails(null);
 
-        myButton.setOnAction((event) -> {
+        addIssueButton.setOnAction((event) -> {
+            detailsPane.setDisable(false);
+            taskTitleField.requestFocus();
+            IssueList.createNewIssue("");
+            todoTableView.getSelectionModel().select(IssueList.getSampleList().size() - 1);
+            selectedIssue = todoTableView.getSelectionModel().getSelectedItem();
+            taskTitleField.clear();
+        });
+
+        completeButton.setOnAction((event) -> {
+            selectedIssue.setIsCompleted(true);
         });
 
         // Don't know where to construct this list
@@ -103,25 +118,27 @@ public class TodoWindowController {
         stateColumn.setCellFactory(CheckBoxTableCell.forTableColumn(stateColumn));
         stateColumn.setCellValueFactory(f -> f.getValue().isCompletedProperty());
 
-        // Marks the selected task completed
-        statusCheckBox.setOnAction(event -> {
-            selectedIssue.setIsCompleted(statusCheckBox.isSelected());
-        });
+//        // Marks the selected task completed
+//        statusCheckBox.setOnAction(event -> {
+//            selectedIssue.setIsCompleted(statusCheckBox.isSelected());
+//        });
 
         // Listen for selection changes and show the task details when changed.
         todoTableView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     this.selectedIssue = newValue;
                     setTaskDetails(newValue);
-                });
+        });
 
-
-        // Detects only when the enter key is pressed
         taskTitleField.setOnKeyPressed((event) -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
-                IssueList.createNewIssue(taskTitleField.getText());
-                taskTitleField.clear();
+                todoTableView.requestFocus();
             }
+        });
+
+        taskTitleField.textProperty().addListener((observable, oldValue, newValue) -> {
+            this.selectedIssue = todoTableView.getSelectionModel().selectedItemProperty().getValue();
+            selectedIssue.setTaskTitle(taskTitleField.getText());
         });
 
         // Deletes Issue from list
@@ -129,7 +146,6 @@ public class TodoWindowController {
         todoTableView.setOnKeyPressed((event) -> {
             if (event.getCode().equals(KeyCode.BACK_SPACE)) {
                 IssueList.deleteIssue(todoTableView.getSelectionModel().getSelectedIndex());
-                taskTitleField.clear();
             }
         });
 
@@ -157,14 +173,13 @@ public class TodoWindowController {
             selectedIssue.setTaskRemarks(remarksTextArea.getText());
         });
 
-
-
     }
 
     private void setTaskDetails(Issue selectedIssue) {
         if (selectedIssue != null) {
             detailsPane.setDisable(false);
             Person responsiblePerson = (Person) selectedIssue.getResponsiblePerson();
+            taskTitleField.setText(selectedIssue.getTaskTitle());
             taskTitleArea.setText(selectedIssue.getTaskTitle());
             remarksTextArea.setText(selectedIssue.getTaskRemarks());
             personPicker.getSelectionModel().select(responsiblePerson);

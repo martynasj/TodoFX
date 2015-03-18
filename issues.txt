@@ -1,35 +1,21 @@
-bnmbm
-null
-true
-Martynas Jankauskas
-2015-03-17
-2015-03-17
-Normal
-hjlfdsafdsa
-null
+nauja uzduotis
+not possible to add more then 1 line
 true
 Default Person
-2015-03-17
-2015-03-17
+2015-03-18
+2015-03-23
+High
+do some bullshiting
+null
+false
+Default Person
+2015-03-18
+2015-03-18
+Normal
+nieko tokio....
+anywayjfkdlsa.
+false
+Patrik Pircak
+2015-03-18
+2015-03-03
 Low
-nieko gero
-null
-true
-Default Person
-2015-03-17
-2015-03-17
-Normal
-Nusipirkt kokia nesamone
-null
-false
-Domas Jurkonis
-2015-03-17
-2015-03-17
-Normal
-new task
-null
-false
-Default Person
-2015-03-17
-2015-03-17
-Normal

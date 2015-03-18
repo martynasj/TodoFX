@@ -1,104 +1,85 @@
-.background {
-    -fx-background-color: #3a3a3a;
-}
-
-/*.root { -fx-focus-color: transparent; }*/
-
 .root {
-    -fx-text-base-color: #202020;
-    -fx-text-fill: -fx-text-base-color;
 
-    /*-dark: rgb(47.0, 52.0, 57.0);*/
+    /* COLOURS */
+    -text-background: white;
+    -text-color: red;
+    -dark-color: #3e3e46;
+    -my-color2: #ff8580;
+    -my-color2-light: #ffaeb3;
+    -my-color: #cdd5dc;
+    -hover-color: derive(-my-color, 50%);
+
+    /*-fx-text-fill: -fx-text-base-color;*/
     /*-fx-background-color: -dark;*/
+
+    -fx-background-color: blue;
 
     /*default font */
     -fx-font-family: 'Helvetica Neue';
-    -fx-font-size: 100%;
+    -fx-font-size: 12 px;
     -fx-font-weight: 600;
-    -fx-disabled-opacity: 0.6;
+    -fx-disabled-opacity: 0.1;
 
-    -flatter-red: rgb(237.0, 68.0, 37.0);
-    -flatter-blue: rgb(0.0, 184.0, 222.0);
+    /*-fx-focus-color: transparent;*/
+    /*-fx-faint-focus-color: transparent;*/
+
 }
 
-/*.details-pane {*/
-    /*-fx-background-color: aliceblue;*/
-/*}*/
+.table-view:focused {
+    -fx-background-color: transparent /* or transparent or other preferred color */,-fx-box-border,-fx-control-inner-background;
+    -fx-background-insets: -1.4, 0, 1;
+    -fx-background-radius: 1.4, 0, 0;
+    /*....*/
+    -fx-padding: 1; /* 0.083333em; */
+}
 
-/*.text-field, .text-area .content, .text-area {*/
-    /*-fx-font-size: 1 em;*/
-    /*-fx-background-color: #f5f5f5;*/
-    /*-fx-border-color: transparent;*/
-/*}*/
+.label {
+    -fx-text-fill: -text-color;
+}
 
-/*.label {*/
-    /*-fx-font-size: 1 em;*/
-/*}*/
+.new-task-field {
+    -fx-font-size: 140%;
+}
 
-/*.new-task-field {*/
-    /*-fx-font-size: 18 px;*/
-    /*-fx-font-weight: bold;*/
-/*}*/
+.text-area {
+    -fx-background-color: -text-background;
+}
 
-/*.text-field:focused, .text-field:hover, .text-area .content:focused, .text-area . content:hover {*/
-    /*-fx-background-color: antiquewhite;*/
-/*}*/
+.text-area .content {
+    -fx-background-color: -text-background;
+}
 
+.text-area .scroll-bar:vertical:disabled {
+    -fx-opacity: 0;
+}
 
-/*.taskTitle {*/
-    /*-fx-font-size: 20 px;*/
-    /*-fx-font-weight: bold;*/
-/*}*/
+.text-input {
+    -fx-background-color: -text-background;
+}
 
-/*.button {*/
-    /*-fx-background-color: aqua;*/
-/*}*/
+.button {
+    -fx-background-color: -my-color2;
+}
 
-/*.button:hover {*/
-    /*-fx-background-color: brown;*/
-/*}*/
+#completeButton {
+    -fx-background-color: #439281;
+}
 
-/*.split-pane {*/
-    /*-fx-background-color: #ffffff;*/
-/*}*/
+.combo-box-base {
+    -fx-background-color: -text-background;
+}
 
-/*.table-view .column-header {*/
-    /*-fx-background-color: #f5f5f5;*/
-/*}*/
+/* HOVER, FOCUS, ARMED STYLES */
+.text-area:hover, .text-field:hover, .text-area .content:hover, .combo-box-base:hover {
+    -fx-color: -hover-color;
+    -fx-background-color: -hover-color;
+}
 
-/*.table-view:focused, .table-view.content {*/
-    /*-fx-border-color: transparent;*/
-/*}*/
+.button:hover {
+    -fx-background-color: -my-color2-light;
+}
 
-/*.column-header-background {*/
-    /*visibility: hidden;*/
-/*}*/
-
-/*.split-pane-divider {*/
-    /*-fx-background-color: #dee6ed;*/
-    /*-fx-border-color: transparent;*/
-    /*-fx-padding: 0;*/
-/*}*/
-
-/*.combo-box {*/
-    /*-fx-background-color: transparent;*/
-/*}*/
-
-/*.combo-box:hover {*/
-    /*-fx-background-color: #ffffff;*/
-    /*-fx-border-color: #3a3a3a;*/
-/*}*/
-
-/*.date-picker {*/
-    /*-fx-background-color: transparent;*/
-/*}*/
-
-
-/*.table-view .cell {*/
-    /*-fx-text-fill: black;*/
-    /*-fx-cell-size: 30 px;*/
-/*}*/
-
-/*.table-view:focused .table-row-cell:filled:focused:selected {*/
-    /*-fx-background-color: #F5F5F5;*/
-/*}*/
+.text-field:focused, .text-area:focused {
+    -fx-color: -hover-color;
+    -fx-background-color: -hover-color;
+}

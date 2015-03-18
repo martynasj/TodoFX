@@ -119,4 +119,5 @@ public class Issue {
     public void setPriority(Priority priority) {
         this.priority = priority;
     }
+
 }
