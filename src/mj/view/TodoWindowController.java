@@ -56,6 +56,9 @@ public class TodoWindowController {
     private Button completeButton;
 
     @FXML
+    private Button deleteButton;
+
+    @FXML
     private TextArea remarksTextArea;
 
     @FXML
@@ -100,7 +103,15 @@ public class TodoWindowController {
         });
 
         completeButton.setOnAction((event) -> {
-            selectedIssue.setIsCompleted(true);
+            if (selectedIssue.getIsCompleted()) {
+                selectedIssue.setIsCompleted(false);
+            } else {
+                selectedIssue.setIsCompleted(true);
+            }
+        });
+
+        deleteButton.setOnAction((event) -> {
+            IssueList.deleteIssue(todoTableView.getSelectionModel().getSelectedIndex());
         });
 
         // Don't know where to construct this list
@@ -180,11 +191,9 @@ public class TodoWindowController {
             detailsPane.setDisable(false);
             Person responsiblePerson = (Person) selectedIssue.getResponsiblePerson();
             taskTitleField.setText(selectedIssue.getTaskTitle());
-            taskTitleArea.setText(selectedIssue.getTaskTitle());
             remarksTextArea.setText(selectedIssue.getTaskRemarks());
             personPicker.getSelectionModel().select(responsiblePerson);
             dateCreatedLabel.setText(selectedIssue.getTaskDate().toString());
-            statusCheckBox.setSelected(selectedIssue.getIsCompleted());
             datePicker.setValue(selectedIssue.getDateDue());
             priorityPicker.setValue(selectedIssue.getPriority());
         } else {

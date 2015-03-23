@@ -26,7 +26,7 @@ public class SaverLoader {
             for (Issue task: issueList) {
 
                 bw.println(task.getTaskTitle());
-                bw.println(task.getTaskRemarks());
+                bw.println(task.getTaskRemarksOneLine());
                 bw.println(task.getIsCompleted());
                 bw.println(task.getResponsiblePerson().toString());
                 bw.println(task.getTaskDate().toString());

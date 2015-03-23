@@ -33,7 +33,6 @@ public class IssueList {
     }
 
     public static void deleteIssue(int x) {
-        System.out.println("bullshit");
         sampleList.remove(x);
     }
 

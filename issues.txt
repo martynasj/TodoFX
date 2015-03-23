@@ -1,21 +1,21 @@
-nauja uzduotis
-not possible to add more then 1 line
+Finish the final paper
+Add some notes about user descriptions...
 true
-Default Person
-2015-03-18
-2015-03-23
-High
-do some bullshiting
-null
-false
-Default Person
-2015-03-18
-2015-03-18
-Normal
-nieko tokio....
-anywayjfkdlsa.
-false
 Patrik Pircak
 2015-03-18
 2015-03-03
 Low
+Install MySQL
+also look for workbench
+false
+Domas Jurkonis
+2015-03-18
+2015-03-18
+Normal
+Review files from October
+fgf vdgf<br>fghfg<br>ghjgj
+false
+Martynas Jankauskas
+2015-03-18
+2015-03-18
+Normal

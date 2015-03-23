@@ -72,7 +72,7 @@
                         <Label fx:id="dateCreatedLabel" text="(Date)" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <Label text="Priority" GridPane.rowIndex="8" />
                         <ComboBox fx:id="priorityPicker" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Delete" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+                        <Button fx:id="deleteButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Delete" GridPane.columnIndex="1" GridPane.rowIndex="13" />
                         <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="6" />
                         <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="9" />
                         <TextField id="newTaskTitleField" fx:id="taskTitleField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Add new task..." styleClass="new-task-field" GridPane.columnSpan="2" GridPane.rowIndex="1" />

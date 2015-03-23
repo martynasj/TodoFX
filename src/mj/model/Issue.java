@@ -3,7 +3,6 @@ package mj.model;
 import javafx.beans.property.*;
 import mj.util.Priority;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
@@ -31,9 +30,9 @@ public class Issue {
     public Issue(String taskTitle) {
 
         this.taskTitle = new SimpleStringProperty(taskTitle);
-        this.taskRemarks = new SimpleStringProperty();
+        this.taskRemarks = new SimpleStringProperty("");
         this.isCompleted = new SimpleBooleanProperty(false);    // initial state is false
-        this.responsiblePerson = new SimpleObjectProperty<>(new Person());
+        this.responsiblePerson = new SimpleObjectProperty<>();
         this.taskDate = new SimpleObjectProperty<>(LocalDate.now());
         this.dateDue = new SimpleObjectProperty<>(LocalDate.now());
         this.priority = Priority.NORMAL;
@@ -41,7 +40,13 @@ public class Issue {
     }
 
     public String getTaskRemarks() {
-        return taskRemarks.get();
+        String remark = taskRemarks.get().replace("<br>", "\n");
+        return remark;
+    }
+
+    public String getTaskRemarksOneLine() {
+        String remark = taskRemarks.get().replace("\n", "<br>");
+        return remark;
     }
 
     public StringProperty taskRemarksProperty() {
