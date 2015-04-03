@@ -11,6 +11,7 @@ import java.time.LocalDate;
 
 public class Issue {
 
+    private Long id;
     private StringProperty taskTitle;
     private StringProperty taskRemarks;
     private BooleanProperty isCompleted;
@@ -39,14 +40,16 @@ public class Issue {
 
     }
 
-    public String getTaskRemarks() {
-        String remark = taskRemarks.get().replace("<br>", "\n");
-        return remark;
+    public Long getId() {
+        return id;
     }
 
-    public String getTaskRemarksOneLine() {
-        String remark = taskRemarks.get().replace("\n", "<br>");
-        return remark;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTaskRemarks() {
+        return taskRemarks.get();
     }
 
     public StringProperty taskRemarksProperty() {

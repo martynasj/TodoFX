@@ -12,8 +12,10 @@ import javafx.stage.Stage;
 import mj.model.Issue;
 import mj.model.IssueList;
 import mj.model.Person;
+import mj.util.HibernateUtil;
 import mj.util.SaverLoader;
 import mj.view.TodoWindowController;
+import org.hibernate.Session;
 import sun.plugin.javascript.navig.Anchor;
 
 import java.io.IOException;
@@ -29,14 +31,15 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("ToDo List");
 
-        SaverLoader.loadInformation();
+//        SaverLoader.loadInformation();
+        createAndStoreIssue("bandom1", "komentaras1");
 
 //        initRootLayout();
         showTodoWindow();
 
         // SaverLoader - class containing some static methods for saving and loading information
         primaryStage.setOnCloseRequest((event) -> {
-            SaverLoader.saveInformation();
+//            SaverLoader.saveInformation();
         });
 
     }
@@ -72,6 +75,18 @@ public class MainApp extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void createAndStoreIssue(String title, String remark) {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+
+        Issue is = new Issue();
+        is.setTaskTitle(title);
+        is.setTaskRemarks(remark);
+        session.save(is);
+
+        session.getTransaction().commit();
     }
 
     public static void main(String[] args) {
