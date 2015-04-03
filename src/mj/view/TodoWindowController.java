@@ -16,6 +16,7 @@ import mj.model.IssueList;
 import mj.model.Person;
 import mj.model.PersonList;
 import mj.util.Priority;
+import mj.util.SaverLoader;
 
 import java.time.LocalDate;
 
@@ -87,7 +88,7 @@ public class TodoWindowController {
     @FXML
     private void initialize() {
 
-        issueList = IssueList.getSampleList();
+        issueList = SaverLoader.getIssueList();
 
         PersonList personList = new PersonList();
 
@@ -97,7 +98,7 @@ public class TodoWindowController {
             detailsPane.setDisable(false);
             taskTitleField.requestFocus();
             IssueList.createNewIssue("");
-            todoTableView.getSelectionModel().select(IssueList.getSampleList().size() - 1);
+            todoTableView.getSelectionModel().select(issueList.size() - 1);
             selectedIssue = todoTableView.getSelectionModel().getSelectedItem();
             taskTitleField.clear();
         });
@@ -144,6 +145,7 @@ public class TodoWindowController {
         taskTitleField.setOnKeyPressed((event) -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
                 todoTableView.requestFocus();
+                IssueList.insertIssueToDb(selectedIssue);
             }
         });
 

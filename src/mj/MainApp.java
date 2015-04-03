@@ -31,34 +31,17 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("ToDo List");
 
-//        SaverLoader.loadInformation();
-        createAndStoreIssue("bandom1", "komentaras1");
+        SaverLoader.loadInformation();
 
-//        initRootLayout();
         showTodoWindow();
 
         // SaverLoader - class containing some static methods for saving and loading information
-        primaryStage.setOnCloseRequest((event) -> {
+//        primaryStage.setOnCloseRequest((event) -> {
 //            SaverLoader.saveInformation();
-        });
+//        });
 
     }
 
-
-    /**
-     *  Root layout is the basic layout that holds other scenes and contains the menu
-     */
-    public void initRootLayout() {
-
-        try {
-            this.rootLayout = FXMLLoader.load(getClass().getResource("view/RootLayout.fxml"));
-            primaryStage.setScene(new Scene(rootLayout));
-            primaryStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     /**
     *   Loads main window of To Do tasks into the root layout
@@ -75,18 +58,6 @@ public class MainApp extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void createAndStoreIssue(String title, String remark) {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-
-        Issue is = new Issue();
-        is.setTaskTitle(title);
-        is.setTaskRemarks(remark);
-        session.save(is);
-
-        session.getTransaction().commit();
     }
 
     public static void main(String[] args) {
