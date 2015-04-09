@@ -3,59 +3,66 @@ package mj.model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import java.io.Serializable;
-
 /**
  * Created by martynasjankauskas on 11/03/15.
  */
 
 public class Person {
 
-    private StringProperty fName;
-    private StringProperty lName;
+    long id;
+    private StringProperty firstName;
+    private StringProperty lastName;
 
     public Person() {
         this("Default", "Person");
     }
 
-    public Person(String fName, String lName) {
-        this.fName = new SimpleStringProperty(fName);
-        this.lName = new SimpleStringProperty(lName);
+    public Person(String firstName, String lastName) {
+        this.firstName = new SimpleStringProperty(firstName);
+        this.lastName = new SimpleStringProperty(lastName);
     }
 
     public Person(String fullname) {
         String[] strings = fullname.split(" ");
-        this.fName = new SimpleStringProperty(strings[0]);
-        this.lName = new SimpleStringProperty(strings[1]);
+        this.firstName = new SimpleStringProperty(strings[0]);
+        this.lastName = new SimpleStringProperty(strings[1]);
     }
 
-    public String getfName() {
-        return fName.get();
+    public long getId() {
+        return id;
     }
 
-    public StringProperty fNameProperty() {
-        return fName;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public void setfName(String fName) {
-        this.fName.set(fName);
+    public String getFirstName() {
+        return firstName.get();
     }
 
-    public String getlName() {
-        return lName.get();
+    public StringProperty firstNameProperty() {
+        return firstName;
     }
 
-    public StringProperty lNameProperty() {
-        return lName;
+    public void setFirstName(String fName) {
+        this.firstName.set(fName);
     }
 
-    public void setlName(String lName) {
-        this.lName.set(lName);
+    public String getLastName() {
+        return lastName.get();
+    }
+
+    public StringProperty lastNameProperty() {
+        return lastName;
+    }
+
+    public void setLastName(String lName) {
+        this.lastName.set(lName);
     }
 
     @Override
     public String toString() {
-        return getfName() + " " + getlName();
+        return getFirstName() + " " + getLastName();
     }
 
 }

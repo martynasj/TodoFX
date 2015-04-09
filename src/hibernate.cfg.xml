@@ -32,6 +32,7 @@
         <!--<property name="hbm2ddl.auto">update</property>-->
 
         <mapping resource="mj/model/Issue.hbm.xml"/>
+        <mapping resource="mj/model/Person.hbm.xml"/>
 
     </session-factory>
 

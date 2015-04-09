@@ -21,8 +21,6 @@ public class SaverLoader {
 
     private static ObservableList<Issue> issueList = FXCollections.observableArrayList();
 
-    static Path issueFile = Paths.get("issues.txt");
-
     public static void saveInformation() {
         for (Issue task: issueList) {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -37,6 +35,7 @@ public class SaverLoader {
         session.beginTransaction();
         List<Issue> issues = session.createQuery("from Issue").list();
         issueList = FXCollections.observableArrayList(issues);
+        session.close();
     }
 
     public static ObservableList<Issue> getIssueList() {

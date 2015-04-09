@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import mj.model.Issue;
 import mj.model.IssueList;
 import mj.model.Person;
+import mj.model.PersonList;
 import mj.util.HibernateUtil;
 import mj.util.SaverLoader;
 import mj.view.TodoWindowController;
@@ -31,6 +32,7 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("ToDo List");
 
+        PersonList.loadPersons();
         SaverLoader.loadInformation();
 
         showTodoWindow();

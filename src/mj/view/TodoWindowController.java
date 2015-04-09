@@ -90,14 +90,12 @@ public class TodoWindowController {
 
         issueList = SaverLoader.getIssueList();
 
-        PersonList personList = new PersonList();
-
         setTaskDetails(null);
 
         addIssueButton.setOnAction((event) -> {
             detailsPane.setDisable(false);
             taskTitleField.requestFocus();
-            IssueList.createNewIssue("");
+            IssueList.createNewIssue();
             todoTableView.getSelectionModel().select(issueList.size() - 1);
             selectedIssue = todoTableView.getSelectionModel().getSelectedItem();
             taskTitleField.clear();
@@ -121,7 +119,7 @@ public class TodoWindowController {
         priorityPicker.setItems(priorities);
 
         todoTableView.setItems(issueList);
-        personPicker.setItems(personList.getPersonList());
+        personPicker.setItems(PersonList.getPersonList());
 
         taskColumn.setCellValueFactory(cellData -> cellData.getValue().taskTitleProperty());
         dateColumn.setCellValueFactory(cellData -> cellData.getValue().dateDueProperty());
@@ -140,19 +138,21 @@ public class TodoWindowController {
                 (observable, oldValue, newValue) -> {
                     this.selectedIssue = newValue;
                     setTaskDetails(newValue);
+                    System.out.println(selectedIssue);
         });
 
         taskTitleField.setOnKeyPressed((event) -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
                 todoTableView.requestFocus();
-                IssueList.insertIssueToDb(selectedIssue);
+                selectedIssue.setTaskTitle(taskTitleField.getText());
+                IssueList.updateIssue(selectedIssue);
             }
         });
 
-        taskTitleField.textProperty().addListener((observable, oldValue, newValue) -> {
-            this.selectedIssue = todoTableView.getSelectionModel().selectedItemProperty().getValue();
-            selectedIssue.setTaskTitle(taskTitleField.getText());
-        });
+//        taskTitleField.textProperty().addListener((observable, oldValue, newValue) -> {
+//            this.selectedIssue = todoTableView.getSelectionModel().selectedItemProperty().getValue();
+//            selectedIssue.setTaskTitle(taskTitleField.getText());
+//        });
 
         // Deletes Issue from list
         // Detects when the delete key is pressed

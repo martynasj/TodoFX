@@ -3,6 +3,7 @@ package mj.model;
 import javafx.beans.property.*;
 import mj.util.Priority;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
 /**
@@ -25,7 +26,7 @@ public class Issue {
     */
 
     public Issue() {
-        this("Default task");
+        this("New task");
     }
 
     public Issue(String taskTitle) {

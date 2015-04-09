@@ -2,27 +2,28 @@ package mj.model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import mj.util.HibernateUtil;
+import org.hibernate.Session;
+
+import java.util.List;
 
 /**
  * Created by martynasjankauskas on 11/03/15.
  */
 public class PersonList {
 
-    private ObservableList<Person> personList = FXCollections.observableArrayList();
+    private static ObservableList<Person> personList = FXCollections.observableArrayList();
 
-    public PersonList() {
-        makePersonList();
+    public static void loadPersons() {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+
+        List<Person> persons = session.createQuery("from Person").list();
+        personList = FXCollections.observableArrayList(persons);
+        session.close();
     }
 
-    private void makePersonList() {
-        personList.add(new Person("Matt Bezak"));
-        personList.add(new Person("Patrik Pircak"));
-        personList.add(new Person("Martynas", "Jankauskas"));
-        personList.add(new Person("Domas", "Jurkonis"));
-        personList.add(new Person("Gytis", "Kandrotas"));
-    }
-
-    public ObservableList<Person> getPersonList() {
+    public static ObservableList<Person> getPersonList() {
         return personList;
     }
 }
