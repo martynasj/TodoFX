@@ -3,10 +3,14 @@ package mj.model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import javax.persistence.*;
+
 /**
  * Created by martynasjankauskas on 11/03/15.
  */
 
+@Entity
+@Access(AccessType.PROPERTY)
 public class Person {
 
     long id;
@@ -28,6 +32,9 @@ public class Person {
         this.lastName = new SimpleStringProperty(strings[1]);
     }
 
+    @Id
+    @GeneratedValue
+    @Column(name = "person_id")
     public long getId() {
         return id;
     }
@@ -36,6 +43,7 @@ public class Person {
         this.id = id;
     }
 
+//    @Column(name = "firstName")
     public String getFirstName() {
         return firstName.get();
     }
@@ -48,6 +56,7 @@ public class Person {
         this.firstName.set(fName);
     }
 
+//    @Column(name = "lastName")
     public String getLastName() {
         return lastName.get();
     }

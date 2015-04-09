@@ -10,6 +10,9 @@ import java.time.LocalDate;
  * Created by martynasjankauskas on 11/03/15.
  */
 
+@Entity
+@Table(name = "Issue")
+@Access(AccessType.PROPERTY)
 public class Issue {
 
     private Long id;
@@ -41,6 +44,9 @@ public class Issue {
 
     }
 
+    @Id
+    @GeneratedValue
+    @Column(name = "issue_id")
     public Long getId() {
         return id;
     }
@@ -61,6 +67,7 @@ public class Issue {
         this.taskRemarks.set(taskRemarks);
     }
 
+    @Transient
     public LocalDate getTaskDate() {
         return taskDate.get();
     }
@@ -73,6 +80,7 @@ public class Issue {
         this.taskDate.set(taskDate);
     }
 
+    @Transient
     public LocalDate getDateDue() {
         return dateDue.get();
     }
@@ -101,6 +109,7 @@ public class Issue {
         return isCompleted.get();
     }
 
+    @Transient
     public BooleanProperty isCompletedProperty() {
         return isCompleted;
     }
@@ -109,6 +118,7 @@ public class Issue {
         this.isCompleted.set(isCompleted);
     }
 
+    @Transient
     public Object getResponsiblePerson() {
         return responsiblePerson.get();
     }
@@ -121,6 +131,7 @@ public class Issue {
         this.responsiblePerson.set(responsiblePerson);
     }
 
+    @Transient
     public Priority getPriority() {
         return priority;
     }

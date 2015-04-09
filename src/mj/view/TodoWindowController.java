@@ -1,9 +1,5 @@
 package mj.view;
 
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,7 +8,7 @@ import javafx.scene.control.cell.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import mj.model.Issue;
-import mj.model.IssueList;
+import mj.model.IssueManager;
 import mj.model.Person;
 import mj.model.PersonList;
 import mj.util.Priority;
@@ -95,7 +91,7 @@ public class TodoWindowController {
         addIssueButton.setOnAction((event) -> {
             detailsPane.setDisable(false);
             taskTitleField.requestFocus();
-            IssueList.createNewIssue();
+            IssueManager.createNewIssue();
             todoTableView.getSelectionModel().select(issueList.size() - 1);
             selectedIssue = todoTableView.getSelectionModel().getSelectedItem();
             taskTitleField.clear();
@@ -110,7 +106,7 @@ public class TodoWindowController {
         });
 
         deleteButton.setOnAction((event) -> {
-            IssueList.deleteIssue(todoTableView.getSelectionModel().getSelectedIndex());
+            IssueManager.deleteIssue(selectedIssue);
         });
 
         // Don't know where to construct this list
@@ -145,20 +141,20 @@ public class TodoWindowController {
             if (event.getCode().equals(KeyCode.ENTER)) {
                 todoTableView.requestFocus();
                 selectedIssue.setTaskTitle(taskTitleField.getText());
-                IssueList.updateIssue(selectedIssue);
+                IssueManager.updateIssue(selectedIssue);
             }
         });
 
-//        taskTitleField.textProperty().addListener((observable, oldValue, newValue) -> {
-//            this.selectedIssue = todoTableView.getSelectionModel().selectedItemProperty().getValue();
-//            selectedIssue.setTaskTitle(taskTitleField.getText());
-//        });
+        taskTitleField.textProperty().addListener((observable, oldValue, newValue) -> {
+            this.selectedIssue = todoTableView.getSelectionModel().selectedItemProperty().getValue();
+            selectedIssue.setTaskTitle(taskTitleField.getText());
+        });
 
         // Deletes Issue from list
         // Detects when the delete key is pressed
         todoTableView.setOnKeyPressed((event) -> {
             if (event.getCode().equals(KeyCode.BACK_SPACE)) {
-                IssueList.deleteIssue(todoTableView.getSelectionModel().getSelectedIndex());
+                IssueManager.deleteIssue(selectedIssue);
             }
         });
 
