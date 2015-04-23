@@ -1,4 +1,4 @@
-package mj.view;
+package mj.todolistfx.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -6,21 +6,25 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import mj.model.Issue;
-import mj.model.IssueManager;
-import mj.model.Person;
-import mj.model.PersonList;
-import mj.util.Priority;
-import mj.util.SaverLoader;
+import mj.todolistfx.entity.Issue;
+import mj.todolistfx.entity.IssueList;
+import mj.todolistfx.entity.Person;
+import mj.todolistfx.dao.PersonDao;
+import mj.todolistfx.service.Priority;
+import mj.todolistfx.service.IssueService;
+import org.reactfx.EventStream;
+import org.reactfx.EventStreams;
 
+import javax.sql.StatementEventListener;
+import java.time.Duration;
 import java.time.LocalDate;
 
 public class TodoWindowController {
 
-    private ObservableList<Issue> issueList;
-
     private Issue selectedIssue;
+
 
     @FXML
     private AnchorPane detailsPane;
@@ -43,8 +47,6 @@ public class TodoWindowController {
     @FXML
     private TextField taskTitleField;
 
-    @FXML
-    private Label taskListLabel;
 
     @FXML
     private Button addIssueButton;
@@ -84,17 +86,44 @@ public class TodoWindowController {
     @FXML
     private void initialize() {
 
-        issueList = SaverLoader.getIssueList();
-
         setTaskDetails(null);
 
+        // Main table
+        todoTableView.setItems(FXCollections.observableArrayList(IssueService.listIssues()));
+        taskColumn.setCellValueFactory(cellData -> cellData.getValue().taskTitleProperty());
+        dateColumn.setCellValueFactory(cellData -> cellData.getValue().dateDueProperty());
+        personColumn.setCellValueFactory(cellData -> cellData.getValue().responsiblePersonProperty());
+        stateColumn.setCellFactory(CheckBoxTableCell.forTableColumn(stateColumn));
+        stateColumn.setCellValueFactory(f -> f.getValue().isCompletedProperty());
+
+        // Priorities list
+        ObservableList<Priority> priorities = FXCollections.observableArrayList();
+        priorities.addAll(Priority.HIGH, Priority.NORMAL, Priority.LOW);
+        priorityPicker.setItems(priorities);
+
+        // Person list
+        personPicker.setItems(FXCollections.observableArrayList(PersonDao.listPersons()));
+
+
+        /**
+         *  ACTIONS
+         */
+
         addIssueButton.setOnAction((event) -> {
-            detailsPane.setDisable(false);
+            Issue issue = new Issue("New Task");
+            todoTableView.getItems().add(issue);
+            IssueService.addIssue(issue);
+            todoTableView.getSelectionModel().selectLast();
             taskTitleField.requestFocus();
-            IssueManager.createNewIssue();
-            todoTableView.getSelectionModel().select(issueList.size() - 1);
             selectedIssue = todoTableView.getSelectionModel().getSelectedItem();
-            taskTitleField.clear();
+        });
+
+        taskTitleField.setOnKeyPressed((event) -> {
+            if (event.getCode().equals(KeyCode.ENTER)) {
+                todoTableView.requestFocus();
+                selectedIssue.setTaskTitle(taskTitleField.getText());
+                IssueService.updateIssue(selectedIssue);
+            }
         });
 
         completeButton.setOnAction((event) -> {
@@ -105,62 +134,59 @@ public class TodoWindowController {
             }
         });
 
+        // DELETE BUTTON
         deleteButton.setOnAction((event) -> {
-            IssueManager.deleteIssue(selectedIssue);
+            IssueService.deleteIssue(selectedIssue);
+            todoTableView.getItems().remove(selectedIssue);
         });
 
-        // Don't know where to construct this list
-        ObservableList<Priority> priorities = FXCollections.observableArrayList();
-        priorities.addAll(Priority.HIGH, Priority.NORMAL, Priority.LOW);
-        priorityPicker.setItems(priorities);
+        // DELETE WITH BACKSPACE
+        todoTableView.setOnKeyPressed((event) -> {
+            if (event.getCode().equals(KeyCode.BACK_SPACE)) {
+                IssueService.deleteIssue(selectedIssue);
+            }
+        });
 
-        todoTableView.setItems(issueList);
-        personPicker.setItems(PersonList.getPersonList());
 
-        taskColumn.setCellValueFactory(cellData -> cellData.getValue().taskTitleProperty());
-        dateColumn.setCellValueFactory(cellData -> cellData.getValue().dateDueProperty());
-        personColumn.setCellValueFactory(cellData -> cellData.getValue().responsiblePersonProperty());
 
-        stateColumn.setCellFactory(CheckBoxTableCell.forTableColumn(stateColumn));
-        stateColumn.setCellValueFactory(f -> f.getValue().isCompletedProperty());
+        /**
+         * LISTENERS
+         */
 
-//        // Marks the selected task completed
-//        statusCheckBox.setOnAction(event -> {
-//            selectedIssue.setIsCompleted(statusCheckBox.isSelected());
-//        });
-
-        // Listen for selection changes and show the task details when changed.
+        // Table selection listener, updates right pane with details
         todoTableView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     this.selectedIssue = newValue;
                     setTaskDetails(newValue);
-                    System.out.println(selectedIssue);
         });
 
-        taskTitleField.setOnKeyPressed((event) -> {
-            if (event.getCode().equals(KeyCode.ENTER)) {
-                todoTableView.requestFocus();
-                selectedIssue.setTaskTitle(taskTitleField.getText());
-                IssueManager.updateIssue(selectedIssue);
-            }
-        });
-
+        // UPDATES TABLE WITH NEW TASK TITLE ON KEY PRESSED
         taskTitleField.textProperty().addListener((observable, oldValue, newValue) -> {
             this.selectedIssue = todoTableView.getSelectionModel().selectedItemProperty().getValue();
             selectedIssue.setTaskTitle(taskTitleField.getText());
         });
 
-        // Deletes Issue from list
-        // Detects when the delete key is pressed
-        todoTableView.setOnKeyPressed((event) -> {
-            if (event.getCode().equals(KeyCode.BACK_SPACE)) {
-                IssueManager.deleteIssue(selectedIssue);
+
+        // UPDATES DATABASE ENTITY REMARKS EVERY 2 SECONDS AFTER CHANGED
+        // USING REACTFX LIBRARY
+        EventStreams.valuesOf(remarksTextArea.textProperty()).successionEnds(Duration.ofSeconds(1)).subscribe(s -> {
+            if (selectedIssue != null) {
+                selectedIssue.setTaskRemarks(remarksTextArea.getText());
+                IssueService.updateIssue(selectedIssue);
+                System.out.println("saved to db");
             }
         });
 
+
+
+        /**
+         * PICKERS
+         */
+
         personPicker.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
-                    todoTableView.getSelectionModel().getSelectedItem().setResponsiblePerson(newValue);
+                    selectedIssue.setResponsiblePerson(newValue);
+                    IssueService.updateIssue(selectedIssue);
                 }
         );
 
@@ -170,19 +196,11 @@ public class TodoWindowController {
 
         datePicker.setOnAction(event -> {
             selectedIssue.setDateDue(datePicker.getValue());
-        });
-
-//        Tried to enable datepicker when mouse enters
-//        datePicker.setOnMouseEntered(event -> {
-//            System.out.println(datePicker.isDisabled());
-//        });
-
-        remarksTextArea.textProperty().addListener((observable, oldValue, newValue) -> {
-            Issue selectedIssue = todoTableView.getSelectionModel().selectedItemProperty().getValue();
-            selectedIssue.setTaskRemarks(remarksTextArea.getText());
+            IssueService.updateIssue(selectedIssue);
         });
 
     }
+
 
     private void setTaskDetails(Issue selectedIssue) {
         if (selectedIssue != null) {
